@@ -31,6 +31,20 @@ class DashboardScreen extends ConsumerWidget {
               );
               },
            ),
+            IconButton(
+             icon: const Icon(
+                Icons.notifications_active,
+             ),
+            onPressed: () {
+              Navigator.push(
+                 context,
+             MaterialPageRoute(
+                builder: (_) =>
+                const SettingsScreen(),
+                  ),
+                );
+                 },
+             ),
         ],
       ),
       body: Center(
