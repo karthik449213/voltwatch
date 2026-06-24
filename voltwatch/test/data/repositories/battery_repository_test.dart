@@ -4,18 +4,21 @@ import 'package:mockito/mockito.dart';
 import 'package:battery_plus/battery_plus.dart';
 import 'package:voltwatch/core/services/battery_service.dart';
 import 'package:voltwatch/data/repositories/battery_repository.dart';
+import 'package:voltwatch/data/datasources/battery_local_datasource.dart';
+
 
 // 1. Generate the Mock class for BatteryService
-@GenerateMocks([BatteryService])
+@GenerateMocks([BatteryService,BatteryLocalDatasource])
 import 'battery_repository_test.mocks.dart';
 
 void main() {
   late BatteryRepository repository;
   late MockBatteryService mockService;
-
+  late MockBatteryLocalDatasource mockDatasource;
   setUp(() {
     mockService = MockBatteryService();
-    repository = BatteryRepository(mockService);
+   mockDatasource = MockBatteryLocalDatasource(); // Initialize it here
+  repository = BatteryRepository(mockService, mockDatasource); 
   });
 
   group('BatteryRepository Tests', () {

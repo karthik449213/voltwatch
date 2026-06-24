@@ -45,12 +45,12 @@ FutureProvider<BatteryState>((ref) {
 });
 
 
-final batteryHistoryProvider =
-    Provider<List<BatteryLog>>((ref) {
-  return ref
-      .read(repositoryProvider)
+final batteryHistoryProvider = FutureProvider<List<BatteryLog>>((ref) async {
+  return await ref
+      .watch(repositoryProvider)
       .getHistory();
 });
+
 
 final thresholdProvider =
     FutureProvider<int>((ref) {

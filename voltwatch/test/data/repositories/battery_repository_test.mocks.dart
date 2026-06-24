@@ -3,11 +3,15 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i3;
+import 'dart:async' as _i4;
 
-import 'package:battery_plus/battery_plus.dart' as _i4;
+import 'package:battery_plus/battery_plus.dart' as _i5;
+import 'package:hive/hive.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:voltwatch/core/services/battery_service.dart' as _i2;
+import 'package:voltwatch/core/services/battery_service.dart' as _i3;
+import 'package:voltwatch/data/datasources/battery_local_datasource.dart'
+    as _i6;
+import 'package:voltwatch/data/models/battery_log.dart' as _i7;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -22,35 +26,83 @@ import 'package:voltwatch/core/services/battery_service.dart' as _i2;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
+class _FakeBox_0<E> extends _i1.SmartFake implements _i2.Box<E> {
+  _FakeBox_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [BatteryService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockBatteryService extends _i1.Mock implements _i2.BatteryService {
+class MockBatteryService extends _i1.Mock implements _i3.BatteryService {
   MockBatteryService() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<int> get batteryLevel => (super.noSuchMethod(
+  _i4.Future<int> get batteryLevel => (super.noSuchMethod(
         Invocation.getter(#batteryLevel),
-        returnValue: _i3.Future<int>.value(0),
-      ) as _i3.Future<int>);
+        returnValue: _i4.Future<int>.value(0),
+      ) as _i4.Future<int>);
 
   @override
-  _i3.Future<_i4.BatteryState> get batteryState => (super.noSuchMethod(
+  _i4.Future<_i5.BatteryState> get batteryState => (super.noSuchMethod(
         Invocation.getter(#batteryState),
-        returnValue: _i3.Future<_i4.BatteryState>.value(_i4.BatteryState.full),
-      ) as _i3.Future<_i4.BatteryState>);
+        returnValue: _i4.Future<_i5.BatteryState>.value(_i5.BatteryState.full),
+      ) as _i4.Future<_i5.BatteryState>);
 
   @override
-  _i3.Future<bool> get isInBatterySaveMode => (super.noSuchMethod(
+  _i4.Future<bool> get isInBatterySaveMode => (super.noSuchMethod(
         Invocation.getter(#isInBatterySaveMode),
-        returnValue: _i3.Future<bool>.value(false),
-      ) as _i3.Future<bool>);
+        returnValue: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
 
   @override
-  _i3.Stream<_i4.BatteryState> get onBatteryStateChanged => (super.noSuchMethod(
+  _i4.Stream<_i5.BatteryState> get onBatteryStateChanged => (super.noSuchMethod(
         Invocation.getter(#onBatteryStateChanged),
-        returnValue: _i3.Stream<_i4.BatteryState>.empty(),
-      ) as _i3.Stream<_i4.BatteryState>);
+        returnValue: _i4.Stream<_i5.BatteryState>.empty(),
+      ) as _i4.Stream<_i5.BatteryState>);
+}
+
+/// A class which mocks [BatteryLocalDatasource].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockBatteryLocalDatasource extends _i1.Mock
+    implements _i6.BatteryLocalDatasource {
+  MockBatteryLocalDatasource() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.Box<_i7.BatteryLog> get box => (super.noSuchMethod(
+        Invocation.getter(#box),
+        returnValue: _FakeBox_0<_i7.BatteryLog>(
+          this,
+          Invocation.getter(#box),
+        ),
+      ) as _i2.Box<_i7.BatteryLog>);
+
+  @override
+  _i4.Future<void> save(_i7.BatteryLog? log) => (super.noSuchMethod(
+        Invocation.method(
+          #save,
+          [log],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  List<_i7.BatteryLog> getLogs() => (super.noSuchMethod(
+        Invocation.method(
+          #getLogs,
+          [],
+        ),
+        returnValue: <_i7.BatteryLog>[],
+      ) as List<_i7.BatteryLog>);
 }

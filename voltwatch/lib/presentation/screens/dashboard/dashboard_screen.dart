@@ -4,6 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers/battery_provider.dart';
 import '../../widgets/battery_guage.dart';
+import '../analytics/analytics_screen.dart';
+import '../settings/settings_screen.dart';
+
 
 
 class DashboardScreen extends ConsumerWidget {
@@ -81,8 +84,7 @@ class DashboardScreen extends ConsumerWidget {
               const Text("Unable to read battery"),
         ),
       ),
-      // floatingActionButton: FloatingActionButton
-      FloatingActionButton(
+       floatingActionButton:FloatingActionButton(
            onPressed: () async {
               await ref
                   .read(repositoryProvider)

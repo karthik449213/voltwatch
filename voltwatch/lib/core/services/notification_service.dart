@@ -3,13 +3,13 @@ import 'settings_service.dart';
 import '../../data/repositories/battery_repository.dart';
 
 class NotificationService {
-  NotificationService._();
 
-  static final NotificationService instance =
-      NotificationService._();
+  NotificationService();
 
-  final FlutterLocalNotificationsPlugin plugin =
-      FlutterLocalNotificationsPlugin();
+  static final NotificationService instance = NotificationService();
+
+  final FlutterLocalNotificationsPlugin plugin = FlutterLocalNotificationsPlugin();
+
 
   Future<void> initialize() async {
     const android = AndroidInitializationSettings(
@@ -20,7 +20,7 @@ class NotificationService {
       android: android,
     );
 
-    await plugin.initialize(settings);
+    await plugin.initialize(settings:settings);
 
     await plugin
         .resolvePlatformSpecificImplementation<
@@ -31,6 +31,7 @@ class NotificationService {
   Future<void> showBatteryAlert(
     int percentage,
   ) async {
+
     const android = AndroidNotificationDetails(
       'battery_alerts',
       'Battery Alerts',
@@ -41,48 +42,32 @@ class NotificationService {
     );
 
     await plugin.show(
-      100,
-      'Battery Alert',
-      'Your device battery has reached $percentage%',
-      const NotificationDetails(
-        android: android,
-      ),
+      id: 100,
+      title: 'Battery Alert',
+      body: 'Your device battery has reached $percentage%',
+       notificationDetails : NotificationDetails(android: android),
     );
+
+
+
   }
 
-  final BatteryRepository repo;
-   Future<void> checkThreshold() async {
-  final level =
-      await repo.batteryLevel;
+  Future<void> checkThreshold({
+    required BatteryRepository repo,
+    required SettingsService settings,
+  }) async {
 
-  final settings =
-      SettingsService();
+    final level = await repo.batteryLevel;
+    final threshold = await settings.getThreshold();
+    final alreadySent = await settings.wasTriggered();
 
-  final threshold =
-      await settings.getThreshold;
-
-  final alreadySent =
-      await settings.wasTriggered;
-
-  if (level >= threshold &&
-      !alreadySent) {
-    await NotificationService
-        .instance
-        .showBatteryAlert(
-          threshold,
-        );
-
-    await settings.setTriggered(
-      true,
-    );
-  }
-
-  if (level < threshold) {
-    await settings.setTriggered(
-      false,
-    );
+    if (level >= threshold && !alreadySent) {
+      await NotificationService.instance.showBatteryAlert(threshold);
+      await settings.setTriggered(true);
+    } else if (level < threshold) {
+      await settings.setTriggered(false);
+    }
   }
 }
 
-}
 
