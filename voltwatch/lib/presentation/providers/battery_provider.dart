@@ -29,6 +29,7 @@ class BatteryNotifier extends StateNotifier<int> {
 
   Future<void> load() async {
     state = await repo.batteryLevel;
+    await checkThreshold();
   }
 }
 

@@ -48,3 +48,36 @@ class NotificationService {
     );
   }
 }
+
+Future<void> checkThreshold() async {
+  final level =
+      await repo.getLevel();
+
+  final settings =
+      SettingsService();
+
+  final threshold =
+      await settings.getThreshold();
+
+  final alreadySent =
+      await settings.wasTriggered();
+
+  if (level >= threshold &&
+      !alreadySent) {
+    await NotificationService
+        .instance
+        .showBatteryAlert(
+          threshold,
+        );
+
+    await settings.setTriggered(
+      true,
+    );
+  }
+
+  if (level < threshold) {
+    await settings.setTriggered(
+      false,
+    );
+  }
+}
