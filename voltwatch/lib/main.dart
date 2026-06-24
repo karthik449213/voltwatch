@@ -7,8 +7,10 @@ Future<void> main()  async{
  WidgetsFlutterBinding.ensureInitialized();
 
  await Hive.initFlutter();
- Hive.registerAdapter(BatteryLogAdapter());
+ Hive.registerAdapter(BatteryLogAdapter(),);
  await Hive.openBox<BatteryLog>('battery_logs');
+
+ await NotificationService.instance.initialize();
   runApp(
     const ProviderScope(
       child: VoltWatch(),
