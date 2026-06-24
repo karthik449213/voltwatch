@@ -17,6 +17,21 @@ class DashboardScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("VoltWatch"),
+
+        actions: [
+          IconButton(
+               icon: const Icon(Icons.analytics),
+               onPressed: () {
+                Navigator.push(
+                     context,
+                MaterialPageRoute(
+                   builder: (_) =>
+                     const AnalyticsScreen(),
+                  ),
+              );
+              },
+           ),
+        ],
       ),
       body: Center(
         child: state.when(
@@ -54,17 +69,17 @@ class DashboardScreen extends ConsumerWidget {
       ),
       // floatingActionButton: FloatingActionButton
       FloatingActionButton(
-  onPressed: () async {
-    await ref
-        .read(repositoryProvider)
-        .saveCurrentBattery();
+           onPressed: () async {
+              await ref
+                  .read(repositoryProvider)
+                   .saveCurrentBattery();
 
-    ref.invalidate(
-      batteryHistoryProvider,
-    );
-  },
-  child: const Icon(Icons.add),
-)
+              ref.invalidate(
+                batteryHistoryProvider,
+              );
+           },
+             child: const Icon(Icons.add),
+       )
     );
   }
 }
