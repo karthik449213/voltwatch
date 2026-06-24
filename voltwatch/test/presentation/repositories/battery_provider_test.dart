@@ -8,7 +8,6 @@ import 'package:battery_plus/battery_plus.dart';
 import 'package:voltwatch/presentation/providers/battery_provider.dart';
 import 'package:voltwatch/data/repositories/battery_repository.dart';
 import 'package:voltwatch/core/services/settings_service.dart';
-import 'package:voltwatch/data/models/battery_log.dart';
 
 // Generate modern mocks for the layers used by the providers
 @GenerateMocks([BatteryRepository, SettingsService])

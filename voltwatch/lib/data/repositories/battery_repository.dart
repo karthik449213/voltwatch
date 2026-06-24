@@ -1,6 +1,5 @@
 import 'package:battery_plus/battery_plus.dart';
 import 'package:voltwatch/core/services/battery_service.dart';
-import 'package:voltwatch/core/services/settings_service.dart';
 import 'package:voltwatch/data/datasources/battery_local_datasource.dart';  
 import 'package:voltwatch/data/models/battery_log.dart';
 
