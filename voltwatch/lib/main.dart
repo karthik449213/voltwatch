@@ -3,7 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'presentation/screens/dashboard/dashboard_screen.dart';
 
-void main() {
+Future<void> main()  async{
+ WidgetsFlutterBinding.ensureInitialized();
+
+ await Hive.initFlutter();
+ Hive.registerAdapter(BatteryLogAdapter());
+ await Hive.openBox<BatteryLog>('battery_logs');
   runApp(
     const ProviderScope(
       child: VoltWatch(),
