@@ -17,12 +17,8 @@ Future<void> main()  async{
          isInDebugMode: false,
       );
 
-            await Workmanager().registerPeriodicTask(
-        "voltwatch-background",
-        batteryTask,
-        frequency: const Duration(minutes: 15),
-        existingWorkPolicy: ExistingPeriodicWorkPolicy.keep,
-      );
+        
+      await BackgroundService.registerTasks();
   runApp(
     const ProviderScope(
       child: VoltWatch(),
