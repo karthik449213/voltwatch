@@ -47,9 +47,7 @@ class NotificationService {
       ),
     );
   }
-}
-
-Future<void> checkThreshold() async {
+   Future<void> checkThreshold() async {
   final level =
       await repo.getLevel();
 
@@ -81,3 +79,6 @@ Future<void> checkThreshold() async {
     );
   }
 }
+
+}
+
