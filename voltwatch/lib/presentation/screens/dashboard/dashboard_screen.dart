@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers/battery_provider.dart';
-import '../../widgets/battery_gauge.dart';
+import '../../widgets/battery_guage.dart';
+
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -47,7 +48,7 @@ class DashboardScreen extends ConsumerWidget {
           },
           loading: () =>
               const CircularProgressIndicator(),
-          error: (_, __) =>
+          error: (_, _) =>
               const Text("Unable to read battery"),
         ),
       ),

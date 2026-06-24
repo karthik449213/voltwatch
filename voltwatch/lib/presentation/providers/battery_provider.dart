@@ -1,44 +1,44 @@
-import 'dart:async';
-import 'package:battery_plus/battery_plus.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
-// Assuming your service and repository classes exist:
+
 import '../../core/services/battery_service.dart';
 import '../../data/repositories/battery_repository.dart';
+import 'dart:async';
 
-// Necessary for code generation syntax
-part 'battery_provider.g.dart';
+import 'package:battery_plus/battery_plus.dart';
 
-@riverpod
-BatteryService batteryService(Ref ref) {
-  return BatteryService();
-}
 
-@riverpod
-BatteryRepository batteryRepository(Ref ref) {
-  // Use watch instead of read to safely track dependencies
-  final service = ref.watch(batteryServiceProvider);
-  return BatteryRepository(service);
-}
+final serviceProvider = Provider(
+      (ref) => BatteryService(),
+);
 
-// Replacement for StateNotifier/StateNotifierProvider
-@riverpod
-class Battery extends _$Battery {
-  @override
-  FutureOr<int> build() async {
-    final repo = ref.watch(batteryRepositoryProvider);
-    return repo.getLevel();
+final repositoryProvider = Provider(
+      (ref) => BatteryRepository(
+    ref.read(serviceProvider),
+  ),
+);
+
+class BatteryNotifier extends StateNotifier<int> {
+  BatteryNotifier(this.repo) : super(0) {
+    load();
   }
 
-  // Add any side effects / state alteration methods here
-  Future<void> refresh() async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() => ref.read(batteryRepositoryProvider).getLevel());
+  final BatteryRepository repo;
+
+  Future<void> load() async {
+    state = await repo.batteryLevel;
   }
 }
 
-// Replacement for StreamProvider
-@riverpod
-Stream<BatteryState> batteryState(Ref ref) {
-  return ref.watch(batteryRepositoryProvider).streamState();
-}
+final batteryProvider =
+StateNotifierProvider<BatteryNotifier, int>(
+      (ref) => BatteryNotifier(
+    ref.read(repositoryProvider),
+  ),
+);
+
+final batteryStateProvider =
+FutureProvider<BatteryState>((ref) {
+  return ref.read(repositoryProvider).batteryState;
+});

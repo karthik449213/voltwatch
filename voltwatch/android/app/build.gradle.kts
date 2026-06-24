@@ -7,7 +7,8 @@ plugins {
 android {
     namespace = "com.example.voltwatch"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "30.0.14904198"
+
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -33,7 +34,6 @@ android {
         }
     }
 }
-
 kotlin {
     compilerOptions {
         jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
