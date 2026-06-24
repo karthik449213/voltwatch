@@ -28,13 +28,33 @@ android {
         multiDexEnabled = true
     }
 
-    buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+        signingConfigs {
+        create("release") {
+            // Correct, clean path reference for Kotlin DSL
+            storeFile = rootProject.file("android/app/debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
         }
     }
+
+    buildTypes {
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("release")
+            
+            isMinifyEnabled = true
+            
+            setProguardFiles(
+                listOf(
+                    getDefaultProguardFile("proguard-android-optimize.txt"), 
+                    "proguard-rules.pro"
+                )
+            )
+        }
+    }
+
+
+
 }
 kotlin {
     compilerOptions {
