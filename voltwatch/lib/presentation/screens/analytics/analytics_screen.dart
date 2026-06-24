@@ -17,7 +17,13 @@ class AnalyticsScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text("Battery Analytics"),
       ),
-      body: ListView.builder(
+      body:RefreshIndicator(
+        onRefresh: () async {
+          ref.invalidate(batteryHistoryProvider);
+
+        },
+      ),
+      child : ListView.builder(
         itemCount: logs.length,
         itemBuilder: (_, index) {
           final item = logs[index];
@@ -40,6 +46,7 @@ class AnalyticsScreen extends ConsumerWidget {
               item.batteryState,
             ),
           );
+      
         },
       ),
     );
