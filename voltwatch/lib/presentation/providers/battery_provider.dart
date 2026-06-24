@@ -16,6 +16,7 @@ final serviceProvider = Provider(
 final repositoryProvider = Provider(
       (ref) => BatteryRepository(
     ref.read(serviceProvider),
+    BatteryLocalDatasource(),
   ),
 );
 
