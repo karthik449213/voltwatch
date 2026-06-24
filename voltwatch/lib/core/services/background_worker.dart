@@ -55,7 +55,15 @@ void callbackDispatcher() {
     if (level < threshold) {
       await settings.setTriggered(false);
     }
+    
+    try {
 
+    // battery logging logic
     return Future.value(true);
+
+    } catch (_) {
+      return Future.value(false);
+      
+    }
   });
 }
