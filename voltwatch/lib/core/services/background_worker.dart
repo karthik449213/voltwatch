@@ -32,6 +32,11 @@ void callbackDispatcher() {
       ),
     );
 
+
+    if (box.length > 100) {
+      await box.deleteAt(0);
+    }
+
     final settings = SettingsService();
 
     final threshold = await settings.getThreshold();
