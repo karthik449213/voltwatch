@@ -1,4 +1,6 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'settings_service.dart';
+import '../../data/repositories/battery_repository.dart';
 
 class NotificationService {
   NotificationService._();
@@ -47,18 +49,20 @@ class NotificationService {
       ),
     );
   }
+
+  final BatteryRepository repo;
    Future<void> checkThreshold() async {
   final level =
-      await repo.getLevel();
+      await repo.batteryLevel;
 
   final settings =
       SettingsService();
 
   final threshold =
-      await settings.getThreshold();
+      await settings.getThreshold;
 
   final alreadySent =
-      await settings.wasTriggered();
+      await settings.wasTriggered;
 
   if (level >= threshold &&
       !alreadySent) {
