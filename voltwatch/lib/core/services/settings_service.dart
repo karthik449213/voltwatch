@@ -1,6 +1,10 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsService {
+
+  final SharedPreferences sharedPreferences;
+  SettingsService({required this.sharedPreferences});
+
   static const thresholdKey =
       "battery_threshold";
 
@@ -10,20 +14,19 @@ class SettingsService {
   Future<void> saveThreshold(
     int value,
   ) async {
-    final prefs =
-        await SharedPreferences.getInstance();
+   
 
-    await prefs.setInt(
+    await sharedPreferences.setInt(
       thresholdKey,
       value,
     );
   }
 
   Future<int> getThreshold() async {
-    final prefs =
-        await SharedPreferences.getInstance();
+    
+        
 
-    return prefs.getInt(
+    return sharedPreferences.getInt(
           thresholdKey,
         ) ??
         80;
@@ -32,20 +35,19 @@ class SettingsService {
   Future<void> setTriggered(
     bool value,
   ) async {
-    final prefs =
-        await SharedPreferences.getInstance();
+    
+      
 
-    await prefs.setBool(
+    await sharedPreferences.setBool(
       lastTriggeredKey,
       value,
     );
   }
 
   Future<bool> wasTriggered() async {
-    final prefs =
-        await SharedPreferences.getInstance();
+  
 
-    return prefs.getBool(
+    return sharedPreferences.getBool(
           lastTriggeredKey,
         ) ??
         false;
