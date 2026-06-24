@@ -11,6 +11,11 @@ Future<void> main()  async{
  await Hive.openBox<BatteryLog>('battery_logs');
 
  await NotificationService.instance.initialize();
+
+   await Workmanager().initialize(
+         callbackDispatcher,
+         isInDebugMode: false,
+      );
   runApp(
     const ProviderScope(
       child: VoltWatch(),
