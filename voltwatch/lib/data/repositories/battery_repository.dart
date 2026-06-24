@@ -1,5 +1,8 @@
 import 'package:battery_plus/battery_plus.dart';
 import 'package:voltwatch/core/services/battery_service.dart';
+import 'package:voltwatch/core/services/settings_service.dart';
+import 'package:voltwatch/data/datasources/battery_local_datasource.dart';  
+import 'package:voltwatch/data/models/battery_log.dart';
 
 class BatteryRepository {
     final BatteryService _batteryService;
@@ -16,8 +19,8 @@ class BatteryRepository {
 
     }
     Future<void> saveCurrentBattery() async {
-  final level = await service.getBatteryLevel();
-  final state = await service.getBatteryState();
+  final level = await _batteryService.batteryLevel;
+  final state = await _batteryService.batteryState;
 
   await datasource.save(
     BatteryLog(
