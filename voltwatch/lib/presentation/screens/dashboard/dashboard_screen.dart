@@ -52,6 +52,19 @@ class DashboardScreen extends ConsumerWidget {
               const Text("Unable to read battery"),
         ),
       ),
+      // floatingActionButton: FloatingActionButton
+      FloatingActionButton(
+  onPressed: () async {
+    await ref
+        .read(repositoryProvider)
+        .saveCurrentBattery();
+
+    ref.invalidate(
+      batteryHistoryProvider,
+    );
+  },
+  child: const Icon(Icons.add),
+)
     );
   }
 }
