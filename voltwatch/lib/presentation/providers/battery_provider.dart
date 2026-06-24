@@ -43,3 +43,11 @@ final batteryStateProvider =
 FutureProvider<BatteryState>((ref) {
   return ref.read(repositoryProvider).batteryState;
 });
+
+
+final batteryHistoryProvider =
+    Provider<List<BatteryLog>>((ref) {
+  return ref
+      .read(repositoryProvider)
+      .getHistory();
+});
