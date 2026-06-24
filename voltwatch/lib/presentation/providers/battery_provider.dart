@@ -51,3 +51,14 @@ final batteryHistoryProvider =
       .read(repositoryProvider)
       .getHistory();
 });
+
+final settingsProvider = Provider(
+  (_) => SettingsService(),
+);
+
+final thresholdProvider =
+    FutureProvider<int>((ref) {
+  return ref
+      .read(settingsProvider)
+      .getThreshold();
+});
