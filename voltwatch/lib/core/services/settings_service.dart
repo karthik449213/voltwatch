@@ -8,8 +8,8 @@ class SettingsService {
   static const thresholdKey =
       "battery_threshold";
 
-  static const lastTriggeredKey =
-      "last_triggered";
+  static const lastTriggeredLevelKey =
+      "last_triggered_level";
 
   Future<void> saveThreshold(
     int value,
@@ -20,6 +20,13 @@ class SettingsService {
       thresholdKey,
       value,
     );
+    await sharedPreferences.remove(lastTriggeredLevelKey);
+
+  }
+
+  // store the exact battery level that fired the notification 
+  Future<void> setLastTriggered(int level) async {
+    await sharedPreferences.setInt(lastTriggeredLevelKey,level);
   }
 
   Future<int> getThreshold() async {
@@ -31,24 +38,21 @@ class SettingsService {
         ) ??
         80;
   }
+    //  Retrieve the last recorded notification alert level
+  Future<int?> getLastTriggeredLevel() async {
+    return sharedPreferences.getInt(lastTriggeredLevelKey);
+  }
 
-  Future<void> setTriggered(
-    bool value,
-  ) async {
-    
-      
-
-    await sharedPreferences.setBool(
-      lastTriggeredKey,
-      value,
-    );
+   //  Clear the trigger flag completely when the battery falls safely below the threshold
+  Future<void> clearTrigger() async {
+    await sharedPreferences.remove(lastTriggeredLevelKey);
   }
 
   Future<bool> wasTriggered() async {
   
 
     return sharedPreferences.getBool(
-          lastTriggeredKey,
+          lastTriggeredLevelKey,
         ) ??
         false;
   }
