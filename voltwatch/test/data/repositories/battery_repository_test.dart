@@ -6,9 +6,8 @@ import 'package:voltwatch/core/services/battery_service.dart';
 import 'package:voltwatch/data/repositories/battery_repository.dart';
 import 'package:voltwatch/data/datasources/battery_local_datasource.dart';
 
-
 // 1. Generate the Mock class for BatteryService
-@GenerateMocks([BatteryService,BatteryLocalDatasource])
+@GenerateMocks([BatteryService, BatteryLocalDatasource])
 import 'battery_repository_test.mocks.dart';
 
 void main() {
@@ -17,8 +16,8 @@ void main() {
   late MockBatteryLocalDatasource mockDatasource;
   setUp(() {
     mockService = MockBatteryService();
-   mockDatasource = MockBatteryLocalDatasource(); // Initialize it here
-  repository = BatteryRepository(mockService, mockDatasource); 
+    mockDatasource = MockBatteryLocalDatasource(); // Initialize it here
+    repository = BatteryRepository(mockService, mockDatasource);
   });
 
   group('BatteryRepository Tests', () {
@@ -32,7 +31,9 @@ void main() {
     });
 
     test('getState returns value from service', () async {
-      when(mockService.batteryState).thenAnswer((_) async => BatteryState.charging);
+      when(
+        mockService.batteryState,
+      ).thenAnswer((_) async => BatteryState.charging);
 
       final result = await repository.batteryState;
 
@@ -51,7 +52,9 @@ void main() {
 
     test('onStateChanged emits stream values from service', () async {
       final states = [BatteryState.charging];
-      when(mockService.onBatteryStateChanged).thenAnswer((_) => Stream.fromIterable(states));
+      when(
+        mockService.onBatteryStateChanged,
+      ).thenAnswer((_) => Stream.fromIterable(states));
 
       expect(repository.onBatteryStateChanged, emitsInOrder(states));
     });

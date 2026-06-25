@@ -15,7 +15,7 @@ void callbackDispatcher() {
         await Hive.initFlutter();
             await NotificationService.instance.initialize();
 
-    // FIXED: Safely check for the specific adapter using its typeId property
+    //  Safely check for the specific adapter using its typeId property
     final adapter = BatteryLogAdapter();
     if (!Hive.isAdapterRegistered(adapter.typeId)) {
       // ignore: undefined_identifier

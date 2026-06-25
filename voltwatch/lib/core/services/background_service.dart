@@ -8,8 +8,7 @@ class BackgroundService {
       "voltwatch-background",
       batteryTask,
       frequency: const Duration(minutes: 15),
-      existingWorkPolicy:
-          ExistingPeriodicWorkPolicy.keep,
+      existingWorkPolicy: ExistingPeriodicWorkPolicy.keep,
     );
   }
 }

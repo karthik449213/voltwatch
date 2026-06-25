@@ -7,16 +7,12 @@ class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
 
   @override
-  ConsumerState<SettingsScreen>
-      createState() =>
-          _SettingsScreenState();
+  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState
-    extends ConsumerState<SettingsScreen> {
-  final controller =
-      TextEditingController();
-    @override
+class _SettingsScreenState extends ConsumerState<SettingsScreen> {
+  final controller = TextEditingController();
+  @override
   void initState() {
     super.initState();
     // Pre-populate the input controller with the existing saved threshold value
@@ -37,32 +33,20 @@ class _SettingsScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title:
-            const Text("Battery Alert"),
-      ),
+      appBar: AppBar(title: const Text("Battery Alert")),
       body: Padding(
-        padding:
-            const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             TextField(
               controller: controller,
-              keyboardType:
-                  TextInputType.number,
-              decoration:
-                  const InputDecoration(
-                labelText:
-                    "Threshold (1-100)",
-              ),
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: "Threshold (1-100)"),
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             ElevatedButton(
-               onPressed: () async {
-                final value = 
-                int.tryParse(controller.text);
+              onPressed: () async {
+                final value = int.tryParse(controller.text);
 
                 if (value == null || value < 1 || value > 100) {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -80,15 +64,13 @@ class _SettingsScreenState
                 ref.invalidate(thresholdProvider);
 
                 if (!context.mounted) return;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Threshold saved at $value%")),
-                  );
-                  Navigator.pop(context);
-                
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Threshold saved at $value%")),
+                );
+                Navigator.pop(context);
               },
 
-              child:
-                  const Text("Save"),
+              child: const Text("Save"),
             ),
           ],
         ),

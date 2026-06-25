@@ -7,8 +7,6 @@ import '../../widgets/battery_gauge.dart';
 import '../analytics/analytics_screen.dart';
 import '../settings/settings_screen.dart';
 
-
-
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
 
@@ -23,44 +21,33 @@ class DashboardScreen extends ConsumerWidget {
 
         actions: [
           IconButton(
-               icon: const Icon(Icons.analytics),
-               onPressed: () {
-                Navigator.push(
-                     context,
-                MaterialPageRoute(
-                   builder: (_) =>
-                     const AnalyticsScreen(),
-                  ),
-              );
-              },
-           ),
-            IconButton(
-             icon: const Icon(
-                Icons.notifications_active,
-             ),
+            icon: const Icon(Icons.analytics),
             onPressed: () {
               Navigator.push(
-                 context,
-             MaterialPageRoute(
-                builder: (_) =>
-                const SettingsScreen(),
-                  ),
-                );
-                 },
-             ),
+                context,
+                MaterialPageRoute(builder: (_) => const AnalyticsScreen()),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.notifications_active),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SettingsScreen()),
+              );
+            },
+          ),
         ],
       ),
-           body: Center(
+      body: Center(
         child: state.when(
           data: (BatteryState batteryState) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // Pass the real-time batteryState into the visual gauge
-                BatteryGauge(
-                  percentage: level,
-                  batteryState : batteryState,
-                ),
+                BatteryGauge(percentage: level, batteryState: batteryState),
                 const SizedBox(height: 30),
                 Text(
                   batteryState.name.toUpperCase(),
@@ -72,25 +59,19 @@ class DashboardScreen extends ConsumerWidget {
               ],
             );
           },
-          loading: () =>
-              const CircularProgressIndicator(),
-          error: (_, _) =>
-              const Text("Unable to read battery"),
+          loading: () => const CircularProgressIndicator(),
+          error: (_, _) => const Text("Unable to read battery"),
         ),
       ),
 
-       floatingActionButton:FloatingActionButton(
-           onPressed: () async {
-              await ref
-                  .read(repositoryProvider)
-                   .saveCurrentBattery();
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await ref.read(repositoryProvider).saveCurrentBattery();
 
-              ref.invalidate(
-                batteryHistoryProvider,
-              );
-           },
-             child: const Icon(Icons.add),
-       )
+          ref.invalidate(batteryHistoryProvider);
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
