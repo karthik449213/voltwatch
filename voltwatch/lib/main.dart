@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:workmanager/workmanager.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,11 +8,12 @@ import 'presentation/screens/dashboard/dashboard_screen.dart';
 import 'package:voltwatch/data/models/battery_log.dart';
 import 'package:voltwatch/core/services/notification_service.dart';
 import 'package:voltwatch/core/services/background_worker.dart';
-import 'package:voltwatch/core/services/background_service.dart';
+
 import 'package:voltwatch/presentation/providers/battery_provider.dart'; 
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
 
   //Initialize Hive & Register the adapter
   await Hive.initFlutter();
@@ -25,17 +26,10 @@ Future<void> main() async {
 
   //  SharedPreferences asynchronously
   final sharedPrefsInstance = await SharedPreferences.getInstance();
-
-  //  Initialize local notifications
+  // Initialize local notifications
   await NotificationService.instance.initialize();
-
-  //  Setup background Workmanager
-  await Workmanager().initialize(
-    callbackDispatcher,
-    isInDebugMode: false,
-  );
-        
-  await BackgroundService.registerTasks();
+  
+   initializeBackgroundTracking();
 
   runApp(
     ProviderScope(
@@ -48,9 +42,33 @@ Future<void> main() async {
     ),
   );
 }
-
-class VoltWatch extends StatelessWidget {
+class VoltWatch extends ConsumerStatefulWidget {
   const VoltWatch({super.key});
+
+  @override
+  ConsumerState<VoltWatch> createState() => _VoltWatchState();
+}
+
+class _VoltWatchState extends ConsumerState<VoltWatch> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Orchestrate automatic UI refresh whenever the app transitions back to the foreground
+    if (state == AppLifecycleState.resumed) {
+      ref.invalidate(batteryHistoryProvider);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +77,7 @@ class VoltWatch extends StatelessWidget {
       title: "VoltWatch",
       theme: ThemeData(
         useMaterial3: true,
+        colorSchemeSeed: Colors.blue,
       ),
       home: const DashboardScreen(),
     );
