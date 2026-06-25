@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:battery_plus/battery_plus.dart';
-
-// Replace 'voltwatch' with your actual package name
 import 'package:voltwatch/presentation/providers/battery_provider.dart';
 import 'package:voltwatch/data/repositories/battery_repository.dart';
 import 'package:voltwatch/core/services/settings_service.dart';
@@ -36,10 +34,10 @@ void main() {
 
   group('Battery Provider Integration Tests', () {
     test('batteryProvider should load the level from repository on creation', () async {
-  // 1. Arrange - Stub the repository's getter
+  // Arrange  Stub the repository's getter
   when(mockRepository.batteryLevel).thenAnswer((_) async => 85);
 
-  // 2. Set up a listener to capture state updates
+  //Set up a listener to capture state updates
   final container = ProviderContainer(
     overrides: [
       repositoryProvider.overrideWithValue(mockRepository),
@@ -47,7 +45,7 @@ void main() {
   );
   addTearDown(container.dispose);
 
-  // 3. Act & Assert - Wait for the state to turn into 85
+  // Wait for the state to turn into 85
   // This listener pattern halts execution until the async constructor finishes
   await expectLater(
     container.read(batteryProvider.notifier).stream,

@@ -1,17 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../core/services/settings_service.dart';
 import '../../data/datasources/battery_local_datasource.dart';
 import '../../data/models/battery_log.dart';
-
 import '../../core/services/battery_service.dart';
 import '../../data/repositories/battery_repository.dart';
 import 'dart:async';
-
 import 'package:battery_plus/battery_plus.dart';
-// 1. Add your global dependency providers at the top (Unimplemented by default)
 final hiveBoxProvider = Provider<Box<BatteryLog>>((ref) {
   throw UnimplementedError('Override this provider in main.dart or tests');
 });

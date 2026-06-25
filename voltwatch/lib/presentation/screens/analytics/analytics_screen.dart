@@ -7,7 +7,6 @@ import '../../providers/battery_provider.dart';
 class AnalyticsScreen extends ConsumerWidget {
   const AnalyticsScreen({super.key});
 
- 
 
  @override
 Widget build(BuildContext context, WidgetRef ref) {

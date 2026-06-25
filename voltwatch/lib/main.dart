@@ -9,29 +9,27 @@ import 'package:voltwatch/data/models/battery_log.dart';
 import 'package:voltwatch/core/services/notification_service.dart';
 import 'package:voltwatch/core/services/background_worker.dart';
 import 'package:voltwatch/core/services/background_service.dart';
-
-// Import your providers file so main.dart knows about hiveBoxProvider and sharedPrefsProvider
 import 'package:voltwatch/presentation/providers/battery_provider.dart'; 
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 1. Initialize Hive & Register the adapter
+  //Initialize Hive & Register the adapter
   await Hive.initFlutter();
   if (!Hive.isAdapterRegistered(BatteryLogAdapter().typeId)) {
     Hive.registerAdapter(BatteryLogAdapter());
   }
   
-  // 2. Open the box asynchronously and save the instance
+  // Open the box asynchronously and save the instance
   final openedBatteryBox = await Hive.openBox<BatteryLog>('battery_logs');
 
-  // 3. Initialize SharedPreferences asynchronously
+  //  SharedPreferences asynchronously
   final sharedPrefsInstance = await SharedPreferences.getInstance();
 
-  // 4. Initialize local notifications
+  //  Initialize local notifications
   await NotificationService.instance.initialize();
 
-  // 5. Setup background Workmanager
+  //  Setup background Workmanager
   await Workmanager().initialize(
     callbackDispatcher,
     isInDebugMode: false,
@@ -42,8 +40,8 @@ Future<void> main() async {
   runApp(
     ProviderScope(
       overrides: [
-        // 6. Inject the active instances into your Riverpod provider tree
-        hiveBoxProvider.overrideWithValue(openedBatteryBox),
+        // Inject the active instances into your Riverpod provider tree
+         hiveBoxProvider.overrideWithValue(openedBatteryBox),
         sharedPrefsProvider.overrideWithValue(sharedPrefsInstance),
       ],
       child: const VoltWatch(),

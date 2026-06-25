@@ -31,7 +31,7 @@ android {
         signingConfigs {
         create("release") {
             // Correct, clean path reference for Kotlin DSL
-            storeFile = rootProject.file("android/app/debug.keystore")
+            storeFile = rootProject.file("app/debug.keystore")
             storePassword = "android"
             keyAlias = "androiddebugkey"
             keyPassword = "android"
@@ -42,8 +42,8 @@ android {
         getByName("release") {
             signingConfig = signingConfigs.getByName("release")
             
-            isMinifyEnabled = true
-            
+            isMinifyEnabled = false
+            isShrinkResources = false
             setProguardFiles(
                 listOf(
                     getDefaultProguardFile("proguard-android-optimize.txt"), 
