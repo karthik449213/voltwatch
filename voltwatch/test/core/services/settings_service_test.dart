@@ -38,17 +38,17 @@ void main() {
         test('setTriggered saves the triggered state', () async {
             when(mockSharedPreferences.setBool(any, any)).thenAnswer((_) async => true);
     
-            await settingsService.setTriggered(true);
+            await settingsService.setLastTriggered(85);
     
-            verify(mockSharedPreferences.setBool(SettingsService.lastTriggeredKey, true)).called(1);
+            verify(mockSharedPreferences.setBool(SettingsService.lastTriggeredLevelKey, true)).called(1);
         });
     
         test('wasTriggered returns the saved triggered state', () async {
-            when(mockSharedPreferences.getBool(SettingsService.lastTriggeredKey)).thenReturn(true);
+            when(mockSharedPreferences.getBool(SettingsService.lastTriggeredLevelKey)).thenReturn(true);
     
-            final triggered = await settingsService.wasTriggered();
+            final triggered = await settingsService.getLastTriggeredLevel();
     
-            expect(triggered, true);
+            expect(triggered, 85);
         });
     });
 }

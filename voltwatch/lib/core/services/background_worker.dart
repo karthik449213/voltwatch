@@ -47,10 +47,10 @@ void callbackDispatcher() {
     final settings = SettingsService(sharedPreferences: sharedPreferences);
 
     final threshold = await settings.getThreshold();
-    final sent = await settings.wasTriggered();
+     final lastTriggered = await settings.getLastTriggeredLevel();
 
 
-    if (level >= threshold && !sent) {
+    if (level >= threshold && lastTriggered != level) {
      
 
       await NotificationService.instance.showBatteryAlert(threshold);
@@ -60,7 +60,7 @@ void callbackDispatcher() {
     }
 
     if (level < threshold) {
-      await settings.setLastTriggered(level);
+      await settings.clearTrigger();
     }
     
     try {
