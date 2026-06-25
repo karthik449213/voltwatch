@@ -75,11 +75,11 @@ class NotificationService {
       final isAllowed = await initialize();
       if (isAllowed) {
        await NotificationService.instance.showBatteryAlert(threshold);
-      await settings.setTriggered(true);
+      await settings.setLastTriggered(level);
       }
       
     } else if (level < threshold) {
-      await settings.setTriggered(false);
+      await settings.setLastTriggered(level);
     }
   }
 }

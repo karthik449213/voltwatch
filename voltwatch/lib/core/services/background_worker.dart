@@ -56,11 +56,11 @@ void callbackDispatcher() {
       await NotificationService.instance.showBatteryAlert(threshold);
 
 
-      await settings.setTriggered(true);
+      await settings.setLastTriggered(level);
     }
 
     if (level < threshold) {
-      await settings.setTriggered(false);
+      await settings.setLastTriggered(level);
     }
     
     try {
