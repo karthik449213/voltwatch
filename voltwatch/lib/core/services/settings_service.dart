@@ -31,8 +31,6 @@ class SettingsService {
 
   Future<int> getThreshold() async {
     
-        
-
     return sharedPreferences.getInt(
           thresholdKey,
         ) ??

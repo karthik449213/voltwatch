@@ -17,9 +17,10 @@ final sharedPrefsProvider = Provider<SharedPreferences>((ref) {
 });
 class BatteryNotifier extends StateNotifier<int> {
   final BatteryRepository repo;
+  final Ref ref;
   StreamSubscription<int>? _subscription;
 
-  BatteryNotifier(this.repo) : super(0) {
+  BatteryNotifier(this.repo,this.ref) : super(0) {
     _initRealTimeTracking();
   }
   void _initRealTimeTracking() {
@@ -41,7 +42,9 @@ class BatteryNotifier extends StateNotifier<int> {
 }
 
 final batteryProvider = StateNotifierProvider<BatteryNotifier, int>(
-  (ref) => BatteryNotifier(ref.read(repositoryProvider)),
+  (ref) => BatteryNotifier(ref.read(repositoryProvider),
+  ref,
+  ),
 );
 
 final batteryStateProvider = StreamProvider<BatteryState>((ref) {
@@ -58,12 +61,12 @@ final batteryHistoryProvider = FutureProvider<List<BatteryLog>>((ref) async {
 });
 
 
-final thresholdProvider =
-    FutureProvider<int>((ref) {
-  return ref
-      .read(settingsProvider)
-      .getThreshold();
+final thresholdProvider = FutureProvider<int>((ref) async {
+  // Using watch ensures Riverpod tracks state updates dynamically across screens
+  final settings = ref.watch(settingsProvider);
+  return await settings.getThreshold();
 });
+
 // 2. Update serviceProvider
 final serviceProvider = Provider(
   (ref) => BatteryService(),
