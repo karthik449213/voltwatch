@@ -11,7 +11,7 @@ class NotificationService {
   final FlutterLocalNotificationsPlugin plugin = FlutterLocalNotificationsPlugin();
 
 
-  Future<void> initialize() async {
+  Future<bool> initialize() async {
     const android = AndroidInitializationSettings(
       '@mipmap/ic_launcher',
     );
@@ -21,12 +21,21 @@ class NotificationService {
     );
 
     await plugin.initialize(settings:settings);
-
-    await plugin
+    // request the permissions and capture the result
+    final bool? granted = await plugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.requestNotificationsPermission();
+        // handle the denied/null case
+     if (granted == null || !granted) {
+          // log the restriction or rpeort to analytics witout crashing 
+          print("Notification Permission Denied:local alerts will not be displated ");
+         return false;
+     }
+     return true;
   }
+
+  
 
   Future<void> showBatteryAlert(
     int percentage,
@@ -62,8 +71,13 @@ class NotificationService {
     final alreadySent = await settings.wasTriggered();
 
     if (level >= threshold && !alreadySent) {
-      await NotificationService.instance.showBatteryAlert(threshold);
+      // re-check or verify initializations status before triggering 
+      final isAllowed = await initialize();
+      if (isAllowed) {
+       await NotificationService.instance.showBatteryAlert(threshold);
       await settings.setTriggered(true);
+      }
+      
     } else if (level < threshold) {
       await settings.setTriggered(false);
     }
