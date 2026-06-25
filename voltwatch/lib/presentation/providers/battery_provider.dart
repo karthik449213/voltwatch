@@ -16,29 +16,39 @@ final sharedPrefsProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError('Override this provider in main.dart or tests');
 });
 class BatteryNotifier extends StateNotifier<int> {
-  BatteryNotifier(this.repo) : super(0) {
-    load();
-  }
-
   final BatteryRepository repo;
+  StreamSubscription<int>? _subscription;
 
-  Future<void> load() async {
-    state = await repo.batteryLevel;
-   // await checkThreshold();
+  BatteryNotifier(this.repo) : super(0) {
+    _initRealTimeTracking();
   }
+  void _initRealTimeTracking() {
+    // Fetch initial level isntantly
+    repo.batteryLevel.then((value) => state = value);
+    // subscribe to live system telmentry updates stream
+    _subscription = Battery().onBatteryStateChanged.asyncMap((_) async {
+    return await repo.batteryLevel;
+  }).listen((level) {
+   state = level;
+  });
+   }
+    @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
+  }
+
 }
 
-final batteryProvider =
-StateNotifierProvider<BatteryNotifier, int>(
-      (ref) => BatteryNotifier(
-    ref.read(repositoryProvider),
-  ),
+final batteryProvider = StateNotifierProvider<BatteryNotifier, int>(
+  (ref) => BatteryNotifier(ref.read(repositoryProvider)),
 );
 
-final batteryStateProvider =
-FutureProvider<BatteryState>((ref) {
-  return ref.read(repositoryProvider).batteryState;
+final batteryStateProvider = StreamProvider<BatteryState>((ref) {
+  // Exposes a continuous stream of system power plugin events to update gauge metrics instantly
+  return Battery().onBatteryStateChanged;
 });
+
 
 
 final batteryHistoryProvider = FutureProvider<List<BatteryLog>>((ref) async {
