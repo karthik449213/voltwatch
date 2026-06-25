@@ -1,5 +1,4 @@
 import 'package:battery_plus/battery_plus.dart';
-import 'package:flutter/widgets.dart';
 import 'package:workmanager/workmanager.dart';
 
 import '../../data/models/battery_log.dart';
@@ -13,10 +12,8 @@ const String batteryTask = "battery_tracking_task";
 @pragma('vm:entry-point')
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
-   
-  WidgetsFlutterBinding.ensureInitialized(); 
-    
-    await Hive.initFlutter();
+        await Hive.initFlutter();
+            await NotificationService.instance.initialize();
 
     // FIXED: Safely check for the specific adapter using its typeId property
     final adapter = BatteryLogAdapter();
@@ -54,7 +51,7 @@ void callbackDispatcher() {
 
 
     if (level >= threshold && !sent) {
-      await NotificationService.instance.initialize();
+     
 
       await NotificationService.instance.showBatteryAlert(threshold);
 
@@ -77,3 +74,23 @@ void callbackDispatcher() {
     }
   });
 }
+/// Configures background task registration safely across Android and iOS platforms
+void initializeBackgroundTracking() {
+  // Configures Android work loops via standard initialization
+  Workmanager().initialize(
+    callbackDispatcher,
+    isInDebugMode: false,
+  );
+  
+  // Registers periodic background work intent for the device scheduler loop
+  Workmanager().registerPeriodicTask(
+    "1",
+    batteryTask,
+    frequency: const Duration(minutes: 15),
+    constraints: Constraints(
+      networkType: NetworkType.notRequired,
+      requiresBatteryNotLow: false,
+    ),
+  );
+}
+
