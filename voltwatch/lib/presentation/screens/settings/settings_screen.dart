@@ -16,6 +16,23 @@ class _SettingsScreenState
     extends ConsumerState<SettingsScreen> {
   final controller =
       TextEditingController();
+    @override
+  void initState() {
+    super.initState();
+    // Pre-populate the input controller with the existing saved threshold value
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final currentThreshold = await ref.read(settingsProvider).getThreshold();
+      if (mounted) {
+        controller.text = currentThreshold.toString();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose(); // Always clean up controllers to prevent memory leaks
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,41 +60,33 @@ class _SettingsScreenState
               height: 20,
             ),
             ElevatedButton(
-              onPressed: () async {
-                final value =
-                    int.tryParse(
-                      controller.text,
-                    );
+               onPressed: () async {
+                final value = 
+                int.tryParse(controller.text);
 
-                if (value == null ||
-                    value < 1 ||
-                    value > 100) {
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(
+                if (value == null || value < 1 || value > 100) {
+                  ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text(
-                        "Enter a value between 1 and 100",
-                      ),
+                      content: Text("Enter a value between 1 and 100"),
                     ),
                   );
                   return;
                 }
 
-                await ref
-                    .read(
-                      settingsProvider,
-                    )
-                    .saveThreshold(
-                      value,
-                    );
+                // Write value directly to local hardware disk storage
+                await ref.read(settingsProvider).saveThreshold(value);
 
-                if (mounted) {
-                  Navigator.pop(
-                    context,
+                // Invalidate the Riverpod cache provider to synchronize foreground components instantly
+                ref.invalidate(thresholdProvider);
+
+                if (!context.mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Threshold saved at $value%")),
                   );
-                }
+                  Navigator.pop(context);
+                
               },
+
               child:
                   const Text("Save"),
             ),
