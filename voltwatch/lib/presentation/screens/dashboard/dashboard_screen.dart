@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers/battery_provider.dart';
-import '../../widgets/battery_guage.dart';
+import '../../widgets/battery_gauge.dart';
 import '../analytics/analytics_screen.dart';
 import '../settings/settings_screen.dart';
 
@@ -50,31 +50,25 @@ class DashboardScreen extends ConsumerWidget {
              ),
         ],
       ),
-      body: Center(
+           body: Center(
         child: state.when(
           data: (BatteryState batteryState) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Pass the real-time batteryState into the visual gauge
                 BatteryGauge(
                   percentage: level,
+                  batteryState : batteryState,
                 ),
                 const SizedBox(height: 30),
                 Text(
                   batteryState.name.toUpperCase(),
                   style: const TextStyle(
                     fontSize: 24,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 12),
-                ElevatedButton(
-                  onPressed: () {
-                    ref
-                        .read(batteryProvider.notifier)
-                        .load();
-                  },
-                  child: const Text("Refresh"),
-                )
               ],
             );
           },
@@ -84,6 +78,7 @@ class DashboardScreen extends ConsumerWidget {
               const Text("Unable to read battery"),
         ),
       ),
+
        floatingActionButton:FloatingActionButton(
            onPressed: () async {
               await ref

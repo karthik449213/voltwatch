@@ -6,6 +6,7 @@ class BatteryGauge extends StatelessWidget {
   const BatteryGauge({
     super.key,
     required this.percentage,
+    required this.batteryState,
   });
 
   Color getColor() {
